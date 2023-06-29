@@ -129,7 +129,8 @@ pub fn run(
 
         warn_deprecated(entry, &logger);
 
-        logger.test_progress(entry_index, n);
+        let entry_desc = format!("{} {}", entry.request.method, entry.request.url);
+        logger.test_progress(entry_index, n, &entry_desc);
 
         // The real execution of the entry happens here, with the overridden entry options.
         let options = options::get_entry_options(entry, runner_options, &mut variables, &logger);
@@ -212,7 +213,8 @@ pub fn run(
             // If we retry the entry, we do not want to display a 'blank' progress bar
             // during the sleep delay. During the pause, we artificially show the previously
             // erased progress line.
-            logger.test_progress(entry_index, n);
+            let entry_desc = format!("{} {}", entry.request.method, entry.request.url);
+            logger.test_progress(entry_index, n, &entry_desc);
             thread::sleep(retry_interval);
             logger.test_erase_line();
             continue;
